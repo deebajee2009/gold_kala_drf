@@ -1,5 +1,6 @@
-# Django DRF for Gold Trading 
-This is a project for platform of trading of gold based on Django DRF 
+# پروژه پلتفرم خرید و فروش آنلاین طلا
+این پروژه با کمک django drf توسعه یافته است.
+
 
 ## Scopes
 Scalable, Extensible, Zero Down Time
