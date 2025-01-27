@@ -15,3 +15,5 @@
 ## Environment Setup
 
 ## API Endpoints
+
+## Technologies Used
