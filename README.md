@@ -1,9 +1,17 @@
 # پروژه پلتفرم خرید و فروش آنلاین طلا
-این پروژه با کمک django drf توسعه یافته است.
 
 
-## Scopes
-Scalable, Extensible, Zero Down Time
+## توضیحات امکانات پروژه
+-
 
-## Installation
-To be implemented 
+## امکانات
+
+## دستورالعمل راه اندازی
+
+### Prerequisites
+
+### Step-by-Step Installation
+
+## Environment Setup
+
+## API Endpoints
