@@ -1,10 +1,8 @@
 # پروژه پلتفرم خرید و فروش آنلاین طلا
 
-
-## توضیحات امکانات پروژه
+## Description
 -
-
-## امکانات
+## Features
 
 ## دستورالعمل راه اندازی
 
@@ -17,3 +15,6 @@
 ## API Endpoints
 
 ## Technologies Used
+
+make sure redis is running
+library versions
