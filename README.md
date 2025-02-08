@@ -12,13 +12,13 @@
 - پیاده سازی ارتباطات درخت واره ای  در دیتابیس یا Tree traverse
 - RESTful API
 - پیاده سازی Caching
-- Push Notification Service
+- Push Notification Server Service
 - Clean Code & Design Patterns
 - Management Commands writing
 - Test Writing
 - API Documenting
 - پیاده سازی پشتیبانی از تاریخ شمسی
-- Django Signals
+- پیاده سازی Django Signals
 - JWT Token Authentication
 - پیاده سازی APIView, ViewSet & Generic View
 
@@ -32,27 +32,31 @@
 - Redis
 - kafka-python
 
-```
+
 ## Step-by-Step Installation
 ### Install and run redis server
+```
 sudo apt-get install redis-server
 sudo systemctl start redis-server
 sudo systemctl enable redis-server
-
-### project github cloning and db migrations
+```
+### project github cloning and DB migrations
+```
 git clone https://github.com/deebajee2009/gold_kala_drf.git
 CD gold_kala_drf
 python3 -m pip install -r requirements.txt
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py createsuperuser
-
+```
 ### Start Celery worker
 celery -A Asset_Exchange_platform worker --loglevel=info &
 
 ### Start Celery beat
 celery -A Asset_Exchange_platform beat --loglevel=info &
 
+### Running Management command & Server
+```
 python3 manage.py check_and_insert
 python3 manage.py kafka_consumer
 python3 manage.py runserver
