@@ -1,12 +1,12 @@
+from decouple import config
 
-import os
-import os
-from dotenv import load_dotenv
-# Load environment variables from .env file
-load_dotenv()
+from .celery import app as celery_app
 
+__all__ = ('celery_app',)
 
-env = os.getenv('DJANGO_ENV', 'development')  # Default to 'development' if not set
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-if env == 'development':
+if DEBUG:
     from .development import *
+else:
+    from .production import *

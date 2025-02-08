@@ -9,8 +9,20 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
 
 import os
 
+from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gold_kala_drf.settings')
+from apps.asset_trade.routing import websocket_urlpatterns
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
-application = get_asgi_application()
+
+
+application = ProtocolTypeRouter({
+    # Handles HTTP requests
+    "http": get_asgi_application(),
+
+    # Handles WebSocket connections
+    "websocket": URLRouter(
+        websocket_urlpatterns,
+    ),
+})

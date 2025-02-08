@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+from celery.schedules import crontab
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,28 +23,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4_5yyc8%3-b&b$w=z21#2udzn1#vi(040pxn1e+8=rqd9w2w^o'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+SECRET_KEY = config('SECRET_KEY')
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # External Packages
+    'django_jalali',
+    'django_celery_beat',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
+    'drf_spectacular',
+    'channels',
+    'mptt',
+    # Internal Apps
     'apps.accounts',
-    'apps.gold_trade'
+    'apps.asset_trade',
+
 ]
 
+ASGI_APPLICATION = 'config.asgi.application'
+AUTH_USER_MODEL = 'accounts.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -131,12 +140,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',  # For web login sessions
-        'rest_framework.authentication.BasicAuthentication',    # Basic username/password auth
-        'rest_framework.authentication.TokenAuthentication',    # Optional for token-based auth
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    
+
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',  # Default permission to restrict access to authenticated users
     ),
@@ -152,14 +160,61 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',  # Enable filtering
     ),
-    
+
     'DEFAULT_THROTTLE_CLASSES': (
         'rest_framework.throttling.AnonRateThrottle',  # Throttle for anonymous users
         'rest_framework.throttling.UserRateThrottle',  # Throttle for authenticated users
     ),
-    
+
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/day',  # Throttling rate for anonymous users
         'user': '1000/day',  # Throttling rate for authenticated users
     },
 }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': "Django DRF Gold & Currencies Exchange",
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
+CELERY_BEAT_SCHEDULE = {
+    'fetch-and-update-cache-every-30-minutes': {
+        'task': 'your_app_name.tasks.fetch_and_update_cache',
+        'schedule': crontab(minute='*/60'),  # Runs every 60 minutes
+    },
+}
+CELERY_BROKER_URL = f'redis://{config('REDIS_HOST')}:{config('REDIS_PORT')}/0'  # or rabbitmq
+CELERY_RESULT_BACKEND = f'redis://{config('REDIS_HOST')}:{config('REDIS_PORT')}/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+# # For Celery Beat
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(config('REDIS_HOST'),int(config('REDIS_PORT')))],
+        },
+    },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f"redis://{config('REDIS_HOST')}:{config('REDIS_PORT')}/1",  # The Redis server address and DB number
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+MONEY_UNIT = 'تومان'
+DOLLAR = 'دلار'

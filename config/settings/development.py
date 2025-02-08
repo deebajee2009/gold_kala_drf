@@ -9,8 +9,3 @@ DATABASES['default'] = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'db_dev.sqlite3',
 }
-
-# Optional: Add any development-specific apps here
-INSTALLED_APPS += [
-    'debug_toolbar',  # for debugging
-]
