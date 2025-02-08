@@ -1,4 +1,5 @@
-# پروژه جنگو پلتفرم خرید و فروش آنلاین فلزات گران بها، رمزارز و دلار با _Redis_, _Kafka_, _Celery_, _Django REST Framework_, _Django MPTT_ & _Websocket Channels_
+# پروژه جنگو پلتفرم خرید و فروش آنلاین فلزات گران بها، رمزارز و دلار با
+# _Redis_, _Kafka_, _Celery_, _Django REST Framework_, _Django MPTT_ & _Websocket Channels_
 
 
 ## Project Overview
