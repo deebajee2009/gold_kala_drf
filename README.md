@@ -32,7 +32,7 @@
 - Redis
 - kafka-python
 
-
+```
 ## Step-by-Step Installation
 ### Install and run redis server
 sudo apt-get install redis-server
@@ -56,7 +56,7 @@ celery -A Asset_Exchange_platform beat --loglevel=info &
 python3 manage.py check_and_insert
 python3 manage.py kafka_consumer
 python3 manage.py runserver
-
+```
 ## Environment Setup
 ### Install virtualenv if you don't have it installed
 python3 -m pip install virtualenv
